@@ -1,19 +1,20 @@
-import React from "react";
-import { createStackNavigator, createAppContainer } from "react-navigation";
-import Home from "./component/Home";
-import About from "./component/About";
+import { createSwitchNavigator, createAppContainer } from "react-navigation";
+import Home from "./component/Post/Home";
+import About from "./component/Post/About";
 import Login from "./component/Auth/Login";
+import Registration from "./component/Auth/Registration";
+import Post from "./component/Post";
 
-const App = createStackNavigator(
+const App = createSwitchNavigator(
   {
-    Home: {
-      screen: Home
-    },
-    About: {
-      screen: About
-    },
     Login: {
       screen: Login
+    },
+    Registration: {
+      screen: Registration
+    },
+    Post: {
+      screen: Post
     }
   },
   {

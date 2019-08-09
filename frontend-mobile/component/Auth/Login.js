@@ -16,6 +16,7 @@ const Login = ({ navigation }) => {
       const res = await axios.post(`http://192.168.0.35:3000`, info);
       if (res.data && res.data.result) {
         alert("로그인 성공");
+        navigation.navigate("Post");
       } else {
         alert("로그인 실패");
       }
@@ -26,7 +27,7 @@ const Login = ({ navigation }) => {
   };
   const logoutEvent = () => {};
   const signupEvent = () => {
-    alert("signup");
+    navigation.navigate("Registration");
   };
   const changeEvent = (text, branch) => {
     setInfo({
@@ -62,9 +63,7 @@ const Login = ({ navigation }) => {
   );
 };
 
-Login.navigationOptions = {
-  title: "Login"
-};
+Login.navigationOptions = { header: null };
 
 const styles = StyleSheet.create({
   container: {
