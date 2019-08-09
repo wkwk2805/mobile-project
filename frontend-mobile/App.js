@@ -2,7 +2,7 @@ import React from "react";
 import { createStackNavigator, createAppContainer } from "react-navigation";
 import Home from "./component/Home";
 import About from "./component/About";
-import Layout from "./component/Layout";
+import Login from "./component/Auth/Login";
 
 const App = createStackNavigator(
   {
@@ -11,10 +11,13 @@ const App = createStackNavigator(
     },
     About: {
       screen: About
+    },
+    Login: {
+      screen: Login
     }
   },
   {
-    initialRouteName: "Home"
+    initialRouteName: "Login"
   }
 );
 
