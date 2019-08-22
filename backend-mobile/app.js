@@ -16,13 +16,8 @@ app.patch("/userinfo", (req, res) => {
   dml.updateUserInfo(req, res);
 });
 
-app.post("/", (req, res) => {
-  const { email, password } = req.body;
-  if (email === user.email && password === user.password) {
-    res.json({ result: true });
-  } else {
-    res.json({ result: false });
-  }
+app.post("/userinfo", async (req, res) => {
+  dml.selectUserInfo(req, res);
 });
 
 app.listen(3000, () => {

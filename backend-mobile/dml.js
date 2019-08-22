@@ -1,7 +1,6 @@
 const dml = pool => {
   return {
     insertUserInfo: async (req, res) => {
-      req.body = { u_email: "1234", u_password: "12345" };
       try {
         const {
           u_email,
@@ -40,12 +39,6 @@ const dml = pool => {
     },
     updateUserInfo: async (req, res) => {
       try {
-        req.body = {
-          u_email: "wkwk2805",
-          u_password: "12345",
-          id: 1,
-          u_withdraw: "Y"
-        };
         let $data = "";
         for (let i in req.body) {
           if (i !== "id") {
@@ -64,6 +57,25 @@ const dml = pool => {
         `;
         const { rows } = await pool.query(update_query);
         res.json(rows);
+      } catch (error) {
+        console.log(error);
+      } finally {
+        pool.end();
+      }
+    },
+    selectUserInfo: async (req, res) => {
+      const { u_email, u_password } = req.body;
+      try {
+        let user_confirm = `SELECT * FROM CHURCHBOOK.USER_INFO WHERE U_EMAIL = $1 AND u_password = $2`;
+        const { rows } = await pool.query(user_confirm, [u_email, u_password]);
+        if (rows.length === 1) {
+          res.json({ result: true, user_info: rows[0] });
+        } else {
+          res.json({
+            result: false,
+            msg: "이메일 또는 비밀번호가 맞지 않습니다."
+          });
+        }
       } catch (error) {
         console.log(error);
       } finally {
