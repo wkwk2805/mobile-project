@@ -8,12 +8,13 @@ import {
   TouchableOpacity
 } from "react-native";
 import axios from "axios";
+import hostname from "../../util/hostname";
 
 const Login = ({ navigation }) => {
   const [info, setInfo] = useState({});
   const loginEvent = async () => {
     try {
-      const res = await axios.post(`http://192.168.0.35:3000`, info);
+      const res = await axios.post(`${hostname}:3000`, info);
       if (res.data && res.data.result) {
         alert("로그인 성공");
         navigation.navigate("Post");

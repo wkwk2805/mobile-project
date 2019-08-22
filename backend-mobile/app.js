@@ -2,19 +2,19 @@ const express = require("express");
 const cors = require("cors");
 const bodyParser = require("body-parser");
 const app = express();
-
+const pool = require("./database");
+const dml = require("./dml")(pool);
 app.use(cors());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 
-app.get("/", (req, res) => {
-  res.send("Hello world");
+app.put("/userinfo", (req, res) => {
+  dml.insertUserInfo(req, res);
 });
 
-const user = {
-  email: "a@naver.com",
-  password: "1234"
-};
+app.get("/userinfo", (req, res) => {
+  dml.updateUserInfo(req, res);
+});
 
 app.post("/", (req, res) => {
   const { email, password } = req.body;
