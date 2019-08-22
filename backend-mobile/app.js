@@ -12,7 +12,7 @@ app.put("/userinfo", (req, res) => {
   dml.insertUserInfo(req, res);
 });
 
-app.get("/userinfo", (req, res) => {
+app.patch("/userinfo", (req, res) => {
   dml.updateUserInfo(req, res);
 });
 
