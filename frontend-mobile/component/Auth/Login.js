@@ -14,19 +14,18 @@ const Login = ({ navigation }) => {
   const [info, setInfo] = useState({});
   const loginEvent = async () => {
     try {
-      const res = await axios.post(`${hostname}:3000`, info);
+      const res = await axios.post(`${hostname}/confirm`, info);
       if (res.data && res.data.result) {
         alert("로그인 성공");
         navigation.navigate("Post");
       } else {
-        alert("로그인 실패");
+        alert(res.data.msg);
       }
     } catch (error) {
       console.log(error);
       alert("로그인 실패");
     }
   };
-  const logoutEvent = () => {};
   const signupEvent = () => {
     navigation.navigate("Registration");
   };
@@ -41,13 +40,13 @@ const Login = ({ navigation }) => {
       <TextInput
         style={styles.inputText}
         placeholder="email@gmail.com"
-        onChangeText={text => changeEvent(text, "email")}
+        onChangeText={text => changeEvent(text, "u_email")}
         value={info.email}
       />
       <TextInput
         style={styles.inputText}
         placeholder="password"
-        onChangeText={text => changeEvent(text, "password")}
+        onChangeText={text => changeEvent(text, "u_password")}
         value={info.password}
         secureTextEntry={true}
       />

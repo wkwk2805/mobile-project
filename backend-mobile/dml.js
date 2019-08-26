@@ -2,43 +2,37 @@ const dml = pool => {
   return {
     insertUserInfo: async (req, res) => {
       try {
-        const {
-          u_email,
-          u_password,
-          u_name,
-          u_age,
-          u_nickname,
-          u_address,
-          u_phone,
-          u_photo_url
-        } = req.body;
-        const insert_data = Object.values(req.body);
-        let $data = "";
-        for (let i in insert_data) {
-          $data += `$${++i},`;
+        if (!req.body || typeof req.body !== "object") return;
+        let insert_query = `INSERT INTO churchbook.user_info (`;
+        let key_data = "";
+        let value_data = "";
+        for (const key in req.body) {
+          key_data += `,${key}\n`;
         }
-        const insert_query = `INSERT INTO churchbook.user_info (
-            ${u_email ? "u_email" : ""}
-            ${u_password ? ", u_password" : ""}
-            ${u_name ? ", u_name" : ""}
-            ${u_age ? ", u_age" : ""}
-            ${u_nickname ? ", u_nickname" : ""}
-            ${u_address ? ", u_address" : ""}
-            ${u_phone ? ", u_phone" : ""}
-            ${u_photo_url ? ", u_photo_url" : ""}
-          ) VALUES (
-            ${$data.substring(0, $data.length - 1)}
-          ) RETURNING u_email, u_name`;
-        const { rows } = await pool.query(insert_query, insert_data);
-        res.json(rows);
+        insert_query += key_data.substring(1, key_data.length);
+        insert_query += ") VALUES (";
+        for (const key in req.body) {
+          switch (typeof req.body[key]) {
+            case "number":
+              value_data += `,${req.body[key]}`;
+              break;
+            case "string":
+              value_data += `,'${req.body[key]}'`;
+              break;
+          }
+        }
+        insert_query += value_data.substring(1, value_data.length);
+        insert_query += ") RETURNING u_email";
+        const { rows } = await pool.query(insert_query);
+        res.json(rows[0].u_email);
       } catch (error) {
+        res.json(error.error);
         console.log(error);
-      } finally {
-        pool.end();
       }
     },
     updateUserInfo: async (req, res) => {
       try {
+        if (!req.body || typeof req.body !== "object") return;
         let $data = "";
         for (let i in req.body) {
           if (i !== "id") {
@@ -53,19 +47,17 @@ const dml = pool => {
                 u_update_date = now() 
                 ${$data}
             WHERE id = ${req.body.id}
-            RETURNING u_email, u_name
+            RETURNING u_email
         `;
         const { rows } = await pool.query(update_query);
-        res.json(rows);
+        res.json(rows[0].u_email);
       } catch (error) {
         console.log(error);
-      } finally {
-        pool.end();
       }
     },
-    selectUserInfo: async (req, res) => {
-      const { u_email, u_password } = req.body;
+    confirmUserInfo: async (req, res) => {
       try {
+        const { u_email, u_password } = req.body;
         let user_confirm = `SELECT * FROM CHURCHBOOK.USER_INFO WHERE U_EMAIL = $1 AND u_password = $2`;
         const { rows } = await pool.query(user_confirm, [u_email, u_password]);
         if (rows.length === 1) {
@@ -78,8 +70,6 @@ const dml = pool => {
         }
       } catch (error) {
         console.log(error);
-      } finally {
-        pool.end();
       }
     }
   };

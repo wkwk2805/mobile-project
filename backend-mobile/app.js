@@ -16,8 +16,8 @@ app.patch("/userinfo", (req, res) => {
   dml.updateUserInfo(req, res);
 });
 
-app.post("/userinfo", async (req, res) => {
-  dml.selectUserInfo(req, res);
+app.post("/confirm", async (req, res) => {
+  dml.confirmUserInfo(req, res);
 });
 
 app.listen(3000, () => {
